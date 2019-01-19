@@ -15,81 +15,81 @@ import SwiftyJSON
 @objcMembers
 open class RNChartViewBase: UIView, ChartViewDelegate {
     open var onSelect:RCTBubblingEventBlock?
-    
+
     open var onChange:RCTBubblingEventBlock?
-    
+
     private var group: String?
-    
+
     private  var identifier: String?
-    
+
     private  var syncX = true
-    
+
     private  var syncY = false
-    
+
     override open func reactSetFrame(_ frame: CGRect)
     {
         super.reactSetFrame(frame);
-        
+
         let chartFrame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         chart.reactSetFrame(chartFrame)
     }
-    
+
     var chart: ChartViewBase {
         fatalError("subclass should override this function.")
     }
-    
+
     var dataExtract : DataExtract {
         fatalError("subclass should override this function.")
     }
-    
+
     func setData(_ data: NSDictionary) {
         let json = BridgeUtils.toJson(data)
-        
+
         chart.data = dataExtract.extract(json)
     }
-    
+
     func setLegend(_ config: NSDictionary) {
         let json = BridgeUtils.toJson(config)
-        
+
         let legend = chart.legend;
-        
+
         if json["enabled"].bool != nil {
             legend.enabled = json["enabled"].boolValue;
         }
-        
+
         if json["textColor"].int != nil {
             legend.textColor = RCTConvert.uiColor(json["textColor"].intValue);
         }
-        
+
         if json["textSize"].number != nil {
             legend.font = legend.font.withSize(CGFloat(truncating: json["textSize"].numberValue))
         }
-        
+
         // Wrapping / clipping avoidance
         if json["wordWrapEnabled"].bool != nil {
             legend.wordWrapEnabled = json["wordWrapEnabled"].boolValue
         }
-        
+
         if json["maxSizePercent"].number != nil {
             legend.maxSizePercent = CGFloat(truncating: json["maxSizePercent"].numberValue)
         }
-        
+
         if json["horizontalAlignment"].string != nil {
             legend.horizontalAlignment = BridgeUtils.parseLegendHorizontalAlignment(json["horizontalAlignment"].stringValue)
         }
-        
+
         if json["verticalAlignment"].string != nil {
             legend.verticalAlignment = BridgeUtils.parseLegendVerticalAlignment(json["verticalAlignment"].stringValue)
         }
-        
+
         if json["orientation"].string != nil {
             legend.orientation = BridgeUtils.parseLegendOrientation(json["orientation"].stringValue)
         }
-        
+
         if json["drawInside"].bool != nil {
             legend.drawInside = json["drawInside"].boolValue
         }
-        
+
         if json["direction"].string != nil {
             legend.direction = BridgeUtils.parseLegendDirection(json["direction"].stringValue)
         }
