@@ -551,11 +551,11 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
         super.didSetProps(changedProps)
         chart.notifyDataSetChanged()
         onAfterDataSetChanged()
-        
+
         if self.group != nil && self.identifier != nil && chart is BarLineChartViewBase {
             ChartGroupHolder.addChart(group: self.group!, identifier: self.identifier!, chart: chart as! BarLineChartViewBase, syncX: syncX, syncY: syncY);
         }
-        
+
     }
-    
+
 }
