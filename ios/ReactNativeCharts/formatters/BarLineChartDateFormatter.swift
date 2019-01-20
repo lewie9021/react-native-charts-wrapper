@@ -50,9 +50,7 @@ open class BarLineChartDateFormatter: NSObject, IValueFormatter, IAxisValueForma
     }
     
     fileprivate func format(_ value: Double) -> String {
-        // Value is in seconds, even though the date set is milliseconds...
         let valueInMilliseconds = convertValueToMilliseconds(value, self.timeUnit);
-        
         let date = Date(timeIntervalSince1970: valueInMilliseconds);
         let second = 1000.0;
         let minute = second * 60.0;
@@ -60,18 +58,9 @@ open class BarLineChartDateFormatter: NSObject, IValueFormatter, IAxisValueForma
         let day = hour * 24.0;
         let month = day * 30.0;
         
-        let dateFormatter = DateFormatter();
         let chartXAxis = self.chart.xAxis;
-        
-        // Get formatted year.
-        // getFormattedDate(date, "yyyy");
-        dateFormatter.dateFormat = "yyyy";
-        let yearText = String(dateFormatter.string(from: date).suffix(2));
-        
-        // Get formatted month.
-        // getFormattedDate(date, "MMM");
-        dateFormatter.dateFormat = "MMM";
-        let monthText = dateFormatter.string(from: date);
+        let yearText = String(getFormattedDate(date, "yyyy").suffix(2));
+        let monthText = getFormattedDate(date, "MMM");
         
         if (chart.visibleXRange > month * 6.0) {
             chartXAxis.labelCount = 5;
@@ -82,8 +71,7 @@ open class BarLineChartDateFormatter: NSObject, IValueFormatter, IAxisValueForma
             chartXAxis.labelCount = 3;
             chartXAxis.axisMaxLabels = 3;
             
-            dateFormatter.dateFormat = "d";
-            let dayText = dateFormatter.string(from: date);
+            let dayText = getFormattedDate(date, "d");
             
             return dayText + " " + monthText + " '" + yearText;
         }
